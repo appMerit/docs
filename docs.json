@@ -85,7 +85,8 @@
   },
   "logo": {
     "light": "/logo/merit_logo_light.svg",
-    "dark": "/logo/merit_logo_dark.svg"
+    "dark": "/logo/merit_logo_dark.svg",
+    "height": 40
   },
   "navbar": {
     "links": [
