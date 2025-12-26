@@ -66,6 +66,15 @@
     "type": "github",
     "url": "https://github.com/appMerit/merit"
   },
+  "contextual": {
+    "options": [
+      "copy",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "cursor"
+    ]
+  },
   "footerSocials": {
     "github": "https://github.com/appMerit/merit"
   }
