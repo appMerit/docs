@@ -6,8 +6,8 @@ description: "Step-by-step guide to analyzing test failures"
 ## Prerequisites
 
 1. **Test results in CSV format** with required columns
-2. **API key** from OpenAI or Anthropic
-3. **Merit Analyzer installed** (`pip install merit-analyzer`)
+2. **Anthropic API key** (direct or via AWS Bedrock)
+3. **Merit Analyzer installed** (`pip install git+https://github.com/appMerit/merit.git`)
 
 ## Step 1: Prepare Test Results
 
@@ -29,17 +29,11 @@ Required columns:
 
 ## Step 2: Configure API Keys
 
-Set up your LLM provider credentials:
+Set up your Anthropic credentials:
 
 <CodeGroup>
 
-```bash OpenAI
-export OPENAI_API_KEY=sk-...
-export MODEL_VENDOR=openai
-export INFERENCE_VENDOR=openai
-```
-
-```bash Anthropic
+```bash Anthropic (Direct)
 export ANTHROPIC_API_KEY=sk-ant-...
 export MODEL_VENDOR=anthropic
 export INFERENCE_VENDOR=anthropic
@@ -58,9 +52,9 @@ export AWS_REGION=us-east-1
 Or create a `.env` file:
 
 ```bash .env
-OPENAI_API_KEY=sk-...
-MODEL_VENDOR=openai
-INFERENCE_VENDOR=openai
+ANTHROPIC_API_KEY=sk-ant-...
+MODEL_VENDOR=anthropic
+INFERENCE_VENDOR=anthropic
 ```
 
 ## Step 3: Run the Analyzer
@@ -118,9 +112,9 @@ The report opens in your browser with interactive visualizations.
 ```bash
 # 1. Set up environment
 cat > .env << EOF
-OPENAI_API_KEY=sk-...
-MODEL_VENDOR=openai
-INFERENCE_VENDOR=openai
+ANTHROPIC_API_KEY=sk-ant-...
+MODEL_VENDOR=anthropic
+INFERENCE_VENDOR=anthropic
 EOF
 
 # 2. Prepare test results (or export from Merit)
@@ -199,9 +193,9 @@ jobs:
       
       - name: Run Analyzer
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          MODEL_VENDOR: openai
-          INFERENCE_VENDOR: openai
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          MODEL_VENDOR: anthropic
+          INFERENCE_VENDOR: anthropic
         run: |
           merit-analyzer analyze results.csv --report analysis.html
       
@@ -235,9 +229,9 @@ Error: API key not configured
 
 **Solution**: Set environment variables:
 ```bash
-export OPENAI_API_KEY=sk-...
-export MODEL_VENDOR=openai
-export INFERENCE_VENDOR=openai
+export ANTHROPIC_API_KEY=sk-ant-...
+export MODEL_VENDOR=anthropic
+export INFERENCE_VENDOR=anthropic
 ```
 
 ### Empty Error Messages
@@ -253,7 +247,7 @@ If `error_message` is empty for a failed test, the analyzer will use an LLM to g
 
 ## Cost Considerations
 
-Merit Analyzer makes LLM API calls:
+Merit Analyzer makes Anthropic API calls:
 
 - **Clustering**: ~$0.10-0.50 per 100 failures
 - **Code analysis**: ~$0.05-0.20 per cluster
@@ -261,8 +255,8 @@ Merit Analyzer makes LLM API calls:
 
 Costs depend on:
 - Number of failures
-- Provider (OpenAI vs Anthropic)
 - Model used
+- Provider (Direct Anthropic vs AWS Bedrock pricing)
 
 ## Next Steps
 

@@ -40,17 +40,7 @@ MERIT_API_KEEPALIVE_EXPIRY=30
 
 ## Error Analyzer (Bring Your Own Key)
 
-Merit Analyzer uses your LLM provider credentials directly.
-
-### OpenAI
-
-```bash .env
-OPENAI_API_KEY=sk-...
-MODEL_VENDOR=openai
-INFERENCE_VENDOR=openai
-```
-
-Get your key: [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+Merit Analyzer uses your LLM provider credentials directly. Currently supports Anthropic models via direct API or AWS Bedrock.
 
 ### Anthropic (Direct)
 
@@ -62,7 +52,7 @@ INFERENCE_VENDOR=anthropic
 
 Get your key: [console.anthropic.com](https://console.anthropic.com/)
 
-### AWS Bedrock
+### AWS Bedrock (Anthropic)
 
 ```bash .env
 MODEL_VENDOR=anthropic
@@ -73,17 +63,6 @@ AWS_REGION=us-east-1
 ```
 
 Configure AWS credentials: [AWS Documentation](https://docs.aws.amazon.com/bedrock/)
-
-### Google Cloud Vertex AI
-
-```bash .env
-MODEL_VENDOR=anthropic
-INFERENCE_VENDOR=gcp
-GOOGLE_CLOUD_PROJECT=your-project-id
-CLOUD_ML_REGION=us-east5
-```
-
-Configure GCP credentials: [Google Cloud Documentation](https://cloud.google.com/vertex-ai/docs)
 
 ## Loading Environment Variables
 
@@ -101,9 +80,9 @@ MERIT_API_BASE_URL=https://api.appmerit.com
 MERIT_API_KEY=your_merit_api_key_here
 
 # Error Analyzer (choose one provider)
-OPENAI_API_KEY=sk-...
-MODEL_VENDOR=openai
-INFERENCE_VENDOR=openai
+ANTHROPIC_API_KEY=sk-ant-...
+MODEL_VENDOR=anthropic
+INFERENCE_VENDOR=anthropic
 ```
 
 ### Shell Export
@@ -148,16 +127,18 @@ MERIT_API_KEY=your_merit_api_key_here
 
 <CodeGroup>
 
-```bash OpenAI
-OPENAI_API_KEY=sk-...
-MODEL_VENDOR=openai
-INFERENCE_VENDOR=openai
-```
-
-```bash Anthropic
+```bash Anthropic (Direct)
 ANTHROPIC_API_KEY=sk-ant-...
 MODEL_VENDOR=anthropic
 INFERENCE_VENDOR=anthropic
+```
+
+```bash AWS Bedrock
+MODEL_VENDOR=anthropic
+INFERENCE_VENDOR=aws
+AWS_ACCESS_KEY_ID=AKIA...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=us-east-1
 ```
 
 </CodeGroup>
@@ -170,9 +151,9 @@ MERIT_API_BASE_URL=https://api.appmerit.com
 MERIT_API_KEY=your_merit_api_key_here
 
 # For error analyzer
-OPENAI_API_KEY=sk-...
-MODEL_VENDOR=openai
-INFERENCE_VENDOR=openai
+ANTHROPIC_API_KEY=sk-ant-...
+MODEL_VENDOR=anthropic
+INFERENCE_VENDOR=anthropic
 ```
 
 ## Troubleshooting
