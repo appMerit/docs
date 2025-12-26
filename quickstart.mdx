@@ -1,80 +1,157 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: "Quick Start"
+description: "Get up and running with Merit in 2 minutes"
 ---
 
-## Get started in three steps
+## Install Merit
 
-Get your documentation site running locally and make your first customization.
+Merit requires Python 3.12 or higher. Install using `uv` (recommended) or `pip`:
 
-### Step 1: Set up your local environment
+<CodeGroup>
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+```bash uv (recommended)
+# Install uv if you haven't already
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-### Step 2: Deploy your changes
+# Install Merit
+uv pip install merit-analyzer
+```
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+```bash pip
+pip install merit-analyzer
+```
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+</CodeGroup>
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+## Write Your First Test
 
-### Step 3: Go live
+Create a file called `test_chatbot.py`:
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+```python test_chatbot.py
+import merit
 
-## Next steps
+def chatbot(prompt: str) -> str:
+    """Your AI system under test."""
+    return f"Hello, {prompt}!"
 
-Now that you have your docs running, explore these key features:
+def merit_chatbot_responds():
+    """Test that chatbot responds correctly."""
+    response = chatbot("World")
+    assert response == "Hello, World!"
+    assert len(response) > 0
+```
 
-<CardGroup cols={2}>
+## Run Your Tests
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
+```bash
+merit
+```
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
+You'll see output like:
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
+```
+Merit Test Runner
+=================
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
+Collected 1 test
 
-</CardGroup>
+test_chatbot.py::merit_chatbot_responds ✓
+
+==================== 1 passed in 0.12s ====================
+```
+
+## Add AI-Powered Assertions
+
+Now let's add an LLM-as-a-Judge assertion. First, set up your Merit API credentials:
+
+```bash .env
+# Required for AI predicates
+MERIT_API_BASE_URL=https://api.appmerit.com
+MERIT_API_KEY=your_merit_api_key_here
+```
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+AI predicates call the Merit cloud service. You need a Merit API key - [contact us](mailto:daniel@appmerit.com) to get access.
 </Note>
+
+Update your test to use AI predicates:
+
+```python test_chatbot.py
+import merit
+from merit.predicates import has_facts
+
+def chatbot(prompt: str) -> str:
+    return "Paris is the capital of France. It's known for the Eiffel Tower."
+
+async def merit_chatbot_facts():
+    """Test that chatbot provides accurate facts."""
+    response = chatbot("Tell me about Paris")
+    
+    # AI-powered assertion checks if facts are present
+    assert await has_facts(response, "Paris is the capital of France")
+```
+
+Run again:
+
+```bash
+merit
+```
+
+## Use Parametrization
+
+Test multiple inputs easily:
+
+```python test_chatbot.py
+import merit
+
+def chatbot(prompt: str) -> str:
+    return f"Hello, {prompt}!"
+
+@merit.parametrize(
+    "name,expected",
+    [
+        ("World", "Hello, World!"),
+        ("Alice", "Hello, Alice!"),
+        ("Bob", "Hello, Bob!"),
+    ],
+)
+def merit_chatbot_greetings(name: str, expected: str):
+    """Test multiple greetings."""
+    response = chatbot(name)
+    assert response == expected
+```
+
+This runs 3 tests automatically, one for each parameter set.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Core Concepts"
+    icon="book"
+    href="/core/writing-tests"
+  >
+    Learn about resources, test cases, and more
+  </Card>
+  <Card
+    title="AI Predicates"
+    icon="brain"
+    href="/predicates/overview"
+  >
+    Explore all LLM-as-a-Judge assertions
+  </Card>
+  <Card
+    title="Advanced Features"
+    icon="rocket"
+    href="/advanced/parametrize"
+  >
+    Tags, filters, repeat tests, and tracing
+  </Card>
+  <Card
+    title="Error Analysis"
+    icon="chart-line"
+    href="/analyzer/overview"
+  >
+    Analyze failures with Merit Analyzer
+  </Card>
+</CardGroup>
