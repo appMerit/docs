@@ -16,6 +16,18 @@
   "topbar": {
     "style": "default"
   },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "search": {
+    "prompt": "Search Merit documentation..."
+  },
+  "announcement": {
+    "title": "🎉 Merit Beta is now available!",
+    "href": "/quickstart"
+  },
   "anchors": [
     {
       "name": "GitHub",
